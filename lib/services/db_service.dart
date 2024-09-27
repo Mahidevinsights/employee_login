@@ -50,4 +50,13 @@ class DBService {
     }
     return null;
   }
+
+  Future<List<Employee>> getAllEmployees() async {
+    final db = await database;
+    final List<Map<String, dynamic>> maps = await db.query('employees');
+
+    return List.generate(maps.length, (i) {
+      return Employee.fromMap(maps[i]);
+    });
+  }
 }

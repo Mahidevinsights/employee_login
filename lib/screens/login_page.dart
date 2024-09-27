@@ -1,10 +1,9 @@
-// ignore_for_file: use_build_context_synchronously
-
-import 'package:employee_management/services/db_service.dart';
+import 'package:employee_management/screens/employee_detail_page.dart';
+import 'package:employee_management/screens/employee_list_page.dart';
+import 'package:employee_management/screens/registration_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
-import 'registration_page.dart';
+import '../services/db_service.dart';
 
 class LoginPage extends StatelessWidget {
   final TextEditingController usernameController = TextEditingController();
@@ -39,8 +38,24 @@ class LoginPage extends StatelessWidget {
                     usernameController.text, passwordController.text);
 
                 if (employee != null) {
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                      content: Text("Welcome, ${employee.username}!")));
+                  if (employee.designation == 'HR') {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const EmployeeListPage(),
+                      ),
+                    );
+                  } else {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => EmployeeDetailPage(employee),
+                      ),
+                    );
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: Text("Welcome, ${employee.username}!"),
+                    ));
+                  }
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(content: Text("Invalid credentials")));
@@ -52,7 +67,8 @@ class LoginPage extends StatelessWidget {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => RegistrationPage()),
+                  MaterialPageRoute(
+                      builder: (context) => const RegistrationPage()),
                 );
               },
               child: const Text("Registration"),
