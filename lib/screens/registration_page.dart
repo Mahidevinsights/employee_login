@@ -66,7 +66,9 @@ class _RegistrationPageState extends State<RegistrationPage> {
               const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {
-                  if (designation != null) {
+                  if (designation != null &&
+                      usernameController.text.isNotEmpty &&
+                      passwordController.text.isNotEmpty) {
                     final employee = Employee(
                       username: usernameController.text,
                       password: passwordController.text,
@@ -81,6 +83,14 @@ class _RegistrationPageState extends State<RegistrationPage> {
                     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                         content: Text("Registration Successful!")));
                     Navigator.pop(context);
+                  } else if (usernameController.text.isEmpty ||
+                      passwordController.text.isEmpty) {
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                      content: Text("Username & pasword shouldn't be empty"),
+                    ));
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                        content: Text("Please select a designation")));
                   }
                 },
                 child: const Text("Register"),
